@@ -1,0 +1,16 @@
+env:
+  python: ${HOME}/anaconda/bin/python # likely needs anaconda python
+  westpa: ${HOME}/westpa # where is westpa?
+model:
+  observable_1: surf2b.World  # molecule to use for pcoord (name.location)
+WE:
+  iters: 100 # number of WE iterations to perform (int)
+  stride: 1e2 # number of MCell timesteps per WE iteration (int)
+  bins:
+    int: True # is the pcoord always an integer (ie a number of molecules?)
+    min_pcoord: 0 # where to start bins
+    max_pcoord: 1000 # where to end bins
+    bin_size: 1 # size of bins
+data:
+  rec_freq: 10 # times per WE iter to log data (int, must evenly divide stride)
+  log_all_species: True # record auxillary data for all molecules

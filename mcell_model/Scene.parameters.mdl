@@ -1,0 +1,5 @@
+/* DEFINE PARAMETERS */
+k_diff = 1e-6    /* ligand diffusion constant  */
+k_p = 1e+8    /* binding constant  */
+k_m = 1e+3    /* unbinding constant  */
+N_release = 1000    /* number of receptors at bottom and top, and number of ligands */
