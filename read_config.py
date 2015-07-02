@@ -1,34 +1,44 @@
+# read yaml config file and import settings as python dictionary
+# convert types (sometimes gratuitously) as a safety measure
+
 import yaml
 
-with open("config.yaml", 'r') as ymlfile:
-    cfg = yaml.load(ymlfile)
+def import_config(filename):
+    with open(filename, 'r') as ymlfile:
+        cfg = yaml.load(ymlfile)
 
-for section in cfg:
-    print(section, cfg[str(section)])
+    # env vars
+    cfg['env']['python'] = str(cfg['env']['python'])
+    cfg['env']['westpa'] = str(cfg['env']['westpa'])
 
-python_loc = str(cfg['env']['python'])
-westpa_loc = str(cfg['env']['westpa'])
+    # model vars
+    cfg['model']['observable_1'] = str(cfg['model']['observable_1'])
 
-obs1_name = str(cfg['model']['observable_1'])
+    # WE vars
+    cfg['WE']['iters'] = int(float(cfg['WE']['iters']))
+    cfg['WE']['stride'] = int(float(cfg['WE']['stride']))
 
-we_iters = int(float(cfg['WE']['iters']))
-we_stride = int(float(cfg['WE']['stride']))
+    # WE:bin vars
+    cfg['WE']['bins']['int'] = bool(cfg['WE']['bins']['int'])
+    cfg['WE']['bins']['min_pcoord'] = float(cfg['WE']['bins']['min_pcoord'])
+    cfg['WE']['bins']['max_pcoord'] = float(cfg['WE']['bins']['max_pcoord'])
+    cfg['WE']['bins']['bin_size'] = float(cfg['WE']['bins']['bin_size'])
+    if cfg['WE']['bins']['int']:
+        cfg['WE']['bins']['min_pcoord'] = int(cfg['WE']['bins']['min_pcoord'])
+        cfg['WE']['bins']['max_pcoord'] = int(cfg['WE']['bins']['max_pcoord'])
+        cfg['WE']['bins']['bin_size'] = int(cfg['WE']['bins']['bin_size'])
 
-int_pcoord = bool(cfg['WE']['bins']['int'])
-min_pcoord = float(cfg['WE']['bins']['min_pcoord'])
-max_pcoord = float(cfg['WE']['bins']['max_pcoord'])
-bin_size = float(cfg['WE']['bins']['bin_size'])
-if int_pcoord:
-    min_pcoord = int(min_pcoord)
-    max_pcoord = int(max_pcoord)
-    bin_size = int(bin_size)
+    # data vars
+    cfg['data']['log_all_species'] = bool(cfg['data']['log_all_species'])
+    cfg['data']['rec_freq'] = int(float(cfg['data']['rec_freq']))
+    assert cfg['WE']['stride'] % cfg['data']['rec_freq'] == 0, "the frequency at which we record data must evenly divide the number of Mcell iterations per WE iteration (we_stride)"
 
-record_freq = int(float(cfg['data']['rec_freq']))
-assert we_stride % record_freq == 0, "the frequency at which we record data must evenly divide the number of Mcell iterations per WE iteration (the stride setting)"
+    return cfg
 
-aux_data = bool(cfg['data']['log_all_species'])
+# test the function
+my_configs = import_config("config.yaml")
+for item in my_configs.items():
+    print item
 
-vars = [python_loc,westpa_loc,obs1_name,we_iters,we_stride,min_pcoord,max_pcoord,bin_size,int_pcoord,record_freq,aux_data]
-
-for var in vars:
-    print str(var)
+with open('out_data.yml', 'w') as outfile:
+    outfile.write( yaml.dump(my_configs,default_flow_style=False) )
