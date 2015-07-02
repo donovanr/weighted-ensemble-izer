@@ -34,11 +34,3 @@ def import_config(filename):
     assert cfg['WE']['stride'] % cfg['data']['rec_freq'] == 0, "the frequency at which we record data must evenly divide the number of Mcell iterations per WE iteration (we_stride)"
 
     return cfg
-
-# test the function
-my_configs = import_config("config.yaml")
-for item in my_configs.items():
-    print item
-
-with open('out_data.yml', 'w') as outfile:
-    outfile.write( yaml.dump(my_configs,default_flow_style=False) )
