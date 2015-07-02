@@ -2,8 +2,8 @@
 # Modify to taste
 
 # Inform WEST where to find Python and our other scripts where to find WEST
-export WEST_PYTHON=$(which python)
-export WEST_ROOT="${HOME}/westpa"
+export WEST_PYTHON=template_west_python
+export WEST_ROOT=template_west_root
 
 # Explicitly name our simulation root directory
 if [[ -z "$WEST_SIM_ROOT" ]]; then

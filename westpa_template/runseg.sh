@@ -19,8 +19,8 @@ cd $WORKDIR
 # set variables for mcell run and progress coordinate extraciton
 
 export MCELL=$(which mcell) # which version of mcell are we using
-export MODEL_NAME=some_model_dir_name # the name of the directory all the model files live in
-export OBSERVABLE1=surf2b.World # observable we are using as our (1st) progress coordinate
+export MODEL_NAME=template_model_dir_name # the name of the directory all the model files live in
+export OBSERVABLE1=template_observable_name # observable we are using as our (1st) progress coordinate
 
 # set up the run -- make links to all the files needed for the segment
 ln -s ${WEST_SIM_ROOT}/istates/${MODEL_NAME} ${MODEL_NAME}

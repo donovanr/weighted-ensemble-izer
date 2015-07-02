@@ -12,9 +12,10 @@ log.debug('loading module %r' % __name__)
 class System(WESTSystem):
     def initialize(self):
         self.pcoord_ndim = 1
-        self.pcoord_len = 10+1
+        self.pcoord_len = template_record_frequency+1
         self.pcoord_dtype = numpy.float32
-        binbounds = [float('-inf')] + [1.0*i + 0.5 for i in xrange(0,1000,1)] + [float('inf')]
+        #binbounds = [float('-inf')] + [1.0*i + 0.5 for i in xrange(0,1000,1)] + [float('inf')]
+        binbounds = template_bin_bounds
         self.bin_mapper = RectilinearBinMapper([binbounds])
         self.bin_target_counts = numpy.empty((self.bin_mapper.nbins,), numpy.int)
         self.bin_target_counts[...] = 8
@@ -32,5 +33,3 @@ def coord_loader(fieldname, coord_file, segment, single_point=False):
            coords[igroup,:,idim] = coord_raw[:,igroup*1+idim]
 
     segment.data[fieldname] = coords
-    
-

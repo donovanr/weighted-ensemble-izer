@@ -1,7 +1,10 @@
+from __future__ import print_function
+
+import sys, os, subprocess, shutil, tempfile, fileinput
+
 import yaml
 import read_config
-
-import os, subprocess, shutil, tempfile
+import file_io
 
 #test the import config function
 my_configs = read_config.import_config("config.yaml")

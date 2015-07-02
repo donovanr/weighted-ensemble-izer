@@ -3,55 +3,48 @@
 
 from __future__ import print_function
 
-import yaml
-import read_config
-
 import sys, os, subprocess, shutil, tempfile, fileinput
 
-# read in config file
-my_configs = read_config.import_config("config.yaml")
+import yaml
+import read_config
+import file_io
 
 
-# get submitted model name
-def get_submitted_model_name(submit_directory):
-    mod_name_list = os.listdir(submit_directory)
-    assert len(mod_name_list) == 1, "too many directories submitted"
-    mod_name = mod_name_list[0]
-    return mod_name
-
+config_file = 'config.yaml'
 submission_directory = 'a_submission'
-model_name = get_submitted_model_name(submission_directory)
-
-
-# intialize new westpa sim with template
-def initialize_tempelate(template_dir,output_dir):
-    # delete previous copy of output_simulationr
-    try:
-       shutil.rmtree(output_dir)
-    except OSError:
-       if not os.path.isdir(output_dir):
-           pass
-
-    # make new copy of output_simulation
-    try:
-        shutil.copytree(template_dir,output_dir)
-    except OSError:
-        if os.path.isdir(output_dir):
-            pass
-
 template_directory = 'westpa_template'
 output_directory = 'output_simulation'
-initialize_tempelate(template_directory,output_directory)
+
+
+# read in config file
+my_configs = read_config.import_config(config_file)
+
+# get submitted model name
+model_name = file_io.get_submitted_model_name(submission_directory)
+
+# intialize new westpa sim with template
+file_io.initialize_tempelate(template_directory,output_directory)
 
 # copy mcell model into template
-shutil.copytree(os.path.join(submission_directory,model_name),os.path.join(output_directory,'bstates',model_name))
+file_io.copy_mcell_model(submission_directory,model_name,output_directory)
 
-# replace dummy model name with submitted model name
+# move Scene.WE.mdl template into new twmplate/model directory
+file_io.mv_sceWEmdl(template_directory,model_name,output_directory)
 
-def replaceAll(file,searchExp,replaceExp):
-    for line in fileinput.input(file, inplace=True):
-        print(line.replace(searchExp, replaceExp), end='')
+# write new cleanup.sh
+file_io.write_new_cleanup(output_directory,model_name)
 
+# write new env.sh
+file_io.write_new_env(output_directory,my_configs['env']['python'],my_configs['env']['westpa'])
 
-old_fake_name='some_model_dir_name' # hard caded into template
-replaceAll(os.path.join(output_directory,'cleanup.sh'),old_fake_name,model_name)
+# write new runseg.sh
+file_io.write_new_runseg(output_directory,model_name,my_configs['model']['observable_1'])
+
+# write new system.py
+file_io.write_new_system(output_directory,my_configs['data']['rec_freq'])
+
+# write new west.cfg
+file_io.write_new_westcfg(output_directory,my_configs['WE']['iters'])
+
+# write new Scene.WE.mdl
+file_io.write_new_sceneWEmdl(output_directory,model_name,my_configs['WE']['iters'],my_configs['WE']['stride'],my_configs['data']['rec_freq'])
