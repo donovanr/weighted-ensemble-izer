@@ -1,6 +1,0 @@
-DEFINE_REACTIONS
-{
-  vol1' + surf1' <-> surf1b' [>k_p, <k_m]
-  vol1' + surf2' <-> surf2b' [>k_p, <k_m]
-}
-
