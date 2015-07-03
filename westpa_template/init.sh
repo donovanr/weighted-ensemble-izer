@@ -5,10 +5,11 @@ ps aux | grep w_run | grep -v grep
 pkill -9 -f w_run
 
 SFX=.d$$
-mv traj_segs{,$SFX}
-mv seg_logs{,$SFX}
+if [ -d traj_segs ]; then mv traj_segs{,$SFX}; fi
+if [ -d seg_logs ]; then mv seg_logs{,$SFX}; fi
+if [ -d istates ]; then mv istates{,$SFX}; fi
 rm -Rf traj_segs$SFX seg_logs$SFX istates$SFX & disown %1
-rm -f system.h5 west.h5 seg_logs.tar
+rm -f west.h5
 mkdir seg_logs traj_segs istates
 
 
