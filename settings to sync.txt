@@ -22,8 +22,8 @@ system.py:
 - bstates:
 	- bstates/example_system_cube/
 
-Scene.WE.mdl:
-	TODO: timestep
+- Scene.WE.mdl:
+	- timestep
 	-chkpt_stride = 1e2
 	-we_iters = 100
 	-substeps = 10

@@ -20,6 +20,7 @@ def import_config(filename):
 
     # WE:bin vars
     cfg['WE']['bins']['int'] = bool(cfg['WE']['bins']['int'])
+    cfg['WE']['bins']['target_count'] = int(float(cfg['WE']['bins']['target_count']))
     cfg['WE']['bins']['min_pcoord'] = float(cfg['WE']['bins']['min_pcoord'])
     cfg['WE']['bins']['max_pcoord'] = float(cfg['WE']['bins']['max_pcoord'])
     cfg['WE']['bins']['bin_size'] = float(cfg['WE']['bins']['bin_size'])

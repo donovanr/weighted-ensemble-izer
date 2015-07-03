@@ -11,6 +11,7 @@ WE:
     min_pcoord: 0 # where to start bins
     max_pcoord: 1000 # where to end bins
     bin_size: 1 # size of bins
+    target_count: 8 # how many trajectory segments to keep in each bin
 data:
   rec_freq: 10 # times per WE iter to log data (int, must evenly divide stride)
   log_all_species: True # record auxillary data for all molecules

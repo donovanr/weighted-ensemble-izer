@@ -14,11 +14,10 @@ class System(WESTSystem):
         self.pcoord_ndim = 1
         self.pcoord_len = template_record_frequency+1
         self.pcoord_dtype = numpy.float32
-        #binbounds = [float('-inf')] + [1.0*i + 0.5 for i in xrange(0,1000,1)] + [float('inf')]
-        binbounds = template_bin_bounds
+        binbounds = [float('-inf')] + template_bin_bounds + [float('inf')]
         self.bin_mapper = RectilinearBinMapper([binbounds])
         self.bin_target_counts = numpy.empty((self.bin_mapper.nbins,), numpy.int)
-        self.bin_target_counts[...] = 8
+        self.bin_target_counts[...] = template_bin_target_count
 
 def coord_loader(fieldname, coord_file, segment, single_point=False):
     coord_raw = numpy.loadtxt(coord_file, dtype=numpy.float32)

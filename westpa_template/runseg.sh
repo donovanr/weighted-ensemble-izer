@@ -9,9 +9,9 @@
 
 set -x
 
-WORKDIR=$WEST_CURRENT_SEG_DATA_REF
-mkdir -pv $WORKDIR || exit 1
-cd $WORKDIR
+WORKDIR="$WEST_CURRENT_SEG_DATA_REF"
+mkdir -pv "$WORKDIR" || exit 1
+cd "$WORKDIR"
 
 
 # MCell run ####################################################################
@@ -23,21 +23,25 @@ export MODEL_NAME=template_model_dir_name # the name of the directory all the mo
 export OBSERVABLE1=template_observable_name # observable we are using as our (1st) progress coordinate
 
 # set up the run -- make links to all the files needed for the segment
-ln -s ${WEST_SIM_ROOT}/istates/${MODEL_NAME} ${MODEL_NAME}
+ln -s "${WEST_SIM_ROOT}/istates/${MODEL_NAME}" "${MODEL_NAME}"
 wait
 
 # if we're continueing the trajectory, restart from the checkpoint file of the parent traj
 
 if [ $WEST_CURRENT_ITER -gt 1 ]; then
-  CHKPT_FLAG="-checkpoint_infile $WEST_PARENT_DATA_REF/chkpt"
+  #CHKPT_FLAG="-checkpoint_infile"
+  #CHKPT="$WEST_PARENT_DATA_REF/chkpt"
+  "$MCELL" -checkpoint_infile "$WEST_PARENT_DATA_REF/chkpt" -seed $RANDOM "$MODEL_NAME/Scene.main.mdl"
 else
-  CHKPT_FLAG=""
+  #CHKPT_FLAG=
+  #CHKPT=
+  "$MCELL" -seed $RANDOM "$MODEL_NAME/Scene.main.mdl"
 fi
 wait
 
-# run mcell
-$MCELL $CHKPT_FLAG -seed $RANDOM $MODEL_NAME/Scene.main.mdl
-wait
+# run mcelldd
+#"$MCELL" $CHKPT_FLAG "$CHKPT" -seed $RANDOM "$MODEL_NAME/Scene.main.mdl"
+#wait
 
 # Progress coordinate computation and extraction ###############################
 
@@ -45,13 +49,13 @@ wait
 # since we save aux coords, need to modify all dat files
 if [ $WEST_CURRENT_ITER -gt 1 ]; then
   for DATFILE in react_data/*.dat; do # $DATFILE includes react_data/ in name
-    PAR_END_STATE=$(tail -n1 $WEST_PARENT_DATA_REF/${DATFILE})
-    sed -i "1i $PAR_END_STATE" ${DATFILE}
+    PAR_END_STATE=$(tail -n1 "$WEST_PARENT_DATA_REF/${DATFILE}")
+    sed -i "1i $PAR_END_STATE" "${DATFILE}"
   done
 fi
 
 # report the progress coordinate to WESTPA
-PCOORD1=$(awk '{print $2}' react_data/${OBSERVABLE1}.dat)
+PCOORD1=$(awk '{print $2}' "react_data/${OBSERVABLE1}.dat")
 echo "$PCOORD1" > $WEST_PCOORD_RETURN
 
 # report auxiliary coordinates to WESTPA

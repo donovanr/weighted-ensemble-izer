@@ -2,6 +2,7 @@ from __future__ import print_function
 
 import sys, os, subprocess, shutil, tempfile, fileinput
 
+import numpy
 import yaml
 import read_config
 import file_io
@@ -68,6 +69,8 @@ template_names['bin_bounds'] = 'template_bin_bounds'
 template_names['we_iters'] = 'template_we_iters'
 template_names['we_stride'] = 'template_we_stride'
 template_names['timestep'] = 'template_timestep'
+template_names['bin_bounds'] = 'template_bin_bounds'
+template_names['bin_target_count'] = 'template_bin_target_count'
 
 # write new cleanup.sh
 def write_new_cleanup(out_dir,configs):
@@ -94,7 +97,14 @@ def write_new_system(out_dir,configs):
     this_file = 'system.py'
     this_path = os.path.join(out_dir,this_file)
     replace_all(this_path,template_names['record_frequency'],str(configs['data']['rec_freq']))
-# TODO: edit bin info in system.py
+    replace_all(this_path,template_names['bin_target_count'],str(configs['WE']['bins']['target_count']))
+
+    bin_min = configs['WE']['bins']['min_pcoord']
+    bin_max = configs['WE']['bins']['max_pcoord']
+    bin_step = configs['WE']['bins']['bin_size']
+    new_bins = 'list(numpy.linspace({0} + {2}/2.0,{1} - {2}/2.0, ({1} - {0})/{2}))'.format(bin_min,bin_max,bin_step)
+    replace_all(this_path,template_names['bin_bounds'],new_bins)
+
 
 # write new west.cfg
 def write_new_westcfg(out_dir,configs):

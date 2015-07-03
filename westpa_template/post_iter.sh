@@ -18,10 +18,10 @@ if [ $WEST_CURRENT_ITER -gt 1 ]; then
 
   PREV_ITER_NUM=$((10#$WEST_CURRENT_ITER - 1)) # force base-10 evaluation if nums have leading zeros
   printf -v STR_PREV_ITER_NUM "%06d" $PREV_ITER_NUM # format the prev iteration number with leading zeros
-  find ${WEST_SIM_ROOT}/traj_segs/${STR_PREV_ITER_NUM}/ -maxdepth 2 -name $CHKPT -delete
+  find "${WEST_SIM_ROOT}/traj_segs/${STR_PREV_ITER_NUM}/" -maxdepth 2 -name $CHKPT -delete
   
   # can remove react_data as well if it's too big
-  # find ${WEST_SIM_ROOT}/traj_segs/${STR_PREV_ITER_NUM}/ -maxdepth 2 -name $REACT_DATA -exec rm -rf {} \;
+  # find "${WEST_SIM_ROOT}/traj_segs/${STR_PREV_ITER_NUM}/" -maxdepth 2 -name $REACT_DATA -exec rm -rf {} \;
 
 fi
 
