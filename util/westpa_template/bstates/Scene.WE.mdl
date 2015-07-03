@@ -1,0 +1,25 @@
+/* internal timestep for mcell */
+timestep = template_timestep
+
+
+/* how many internal time steps per WE iteration? */
+chkpt_stride = template_we_stride
+
+/* number of WE iters -- should match number in west.cfg */
+we_iters = template_we_iters
+
+/* number of mcell iterations of size timestep in entire simulation */
+iterations = we_iters*chkpt_stride
+
+
+/* how many times to record counts per WE iter -- affects pcoord length in system.py */
+substeps = template_record_frequency
+
+/* reinterprets substeps to get read by Scene.rxn_output.mdl */
+record_freq = timestep*chkpt_stride/substeps 
+
+
+/* checkpoint args that mcell needs */
+CHECKPOINT_OUTFILE = "chkpt"
+CHECKPOINT_ITERATIONS = chkpt_stride
+
