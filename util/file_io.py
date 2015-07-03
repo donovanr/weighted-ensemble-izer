@@ -1,6 +1,6 @@
 from __future__ import print_function
 
-import sys, os, subprocess, shutil, tempfile, fileinput
+import os, shutil, fileinput
 
 import numpy
 import yaml
