@@ -33,4 +33,3 @@ INSTANTIATE Scene OBJECT
 sprintf(seed,"%05g",SEED)
 
 INCLUDE_FILE = "Scene.rxn_output.mdl"
-

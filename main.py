@@ -25,6 +25,10 @@ model_name = file_io.get_submitted_model_name(submission_directory)
 # add model name to config dict
 my_configs['model_name'] = str(model_name)
 
+# get default timestep
+default_timestep = file_io.get_default_timestep(submission_directory, my_configs)
+my_configs['default_timestep'] = default_timestep
+
 # intialize new westpa sim with template
 file_io.initialize_tempelate(template_directory,output_directory)
 
@@ -41,3 +45,5 @@ file_io.write_new_runseg(output_directory,my_configs)
 file_io.write_new_system(output_directory,my_configs)
 file_io.write_new_westcfg(output_directory,my_configs)
 file_io.write_new_sceneWEmdl(output_directory,my_configs)
+file_io.write_new_scenemainmdl(output_directory,my_configs)
+file_io.write_new_scenerxn_outputmdl(output_directory,my_configs)

@@ -13,6 +13,17 @@ def get_submitted_model_name(submit_directory):
     mod_name = mod_name_list[0]
     return mod_name
 
+# get default timestep
+def get_default_timestep(submit_directory,configs):
+    this_file = 'Scene.main.mdl'
+    this_path = os.path.join(submit_directory,configs['model_name'],this_file)
+
+    with open(this_path) as f:
+        for line in f:
+            if line.startswith('TIME_STEP =') or line.startswith('TIME_STEP='):
+                deflt_timestep = float(line.split('=')[-1])
+    return deflt_timestep
+
 
 # intialize new westpa sim with template
 def initialize_tempelate(template_dir,output_dir):
@@ -46,7 +57,7 @@ def replace_all(file,searchExp,replaceExp):
         print(line.replace(searchExp, replaceExp), end='')
 
 
-# hard-coded into template
+# hard-coded into westpa_template
 template_names = {}
 template_names['model_name'] = 'template_model_dir_name'
 template_names['west_python'] = 'template_west_python'
@@ -56,8 +67,7 @@ template_names['record_frequency'] = 'template_record_frequency'
 template_names['bin_bounds'] = 'template_bin_bounds'
 template_names['we_iters'] = 'template_we_iters'
 template_names['we_stride'] = 'template_we_stride'
-
-# TODO: pass config params as dict and parse out needed params in each function
+template_names['timestep'] = 'template_timestep'
 
 # write new cleanup.sh
 def write_new_cleanup(out_dir,configs):
@@ -99,3 +109,31 @@ def write_new_sceneWEmdl(out_dir,configs):
     replace_all(this_path,template_names['we_iters'],str(configs['WE']['iters']))
     replace_all(this_path,template_names['we_stride'],str(configs['WE']['stride']))
     replace_all(this_path,template_names['record_frequency'],str(configs['data']['rec_freq']))
+    replace_all(this_path,template_names['timestep'],str(configs['default_timestep']))
+
+
+# write new Scene.WE.mdl
+def write_new_scenemainmdl(out_dir,configs):
+    this_file = 'Scene.main.mdl'
+    this_path = os.path.join(out_dir,'bstates',configs['model_name'],this_file)
+
+    for linenum,line in enumerate(fileinput.input(this_path, inplace=True)):
+        if linenum==0:
+            print('INCLUDE_FILE = "Scene.WE.mdl"')
+            print(line, end='')
+        elif line.startswith('ITERATIONS =') or line.startswith('ITERATIONS='):
+            print('ITERATIONS = iterations')
+        elif line.startswith('TIME_STEP =') or line.startswith('TIME_STEP='):
+            print('TIME_STEP = timestep')
+        else:
+            print(line, end='')
+
+# write new Scene.rxn_output.mdl
+def write_new_scenerxn_outputmdl(out_dir,configs):
+    this_file = 'Scene.rxn_output.mdl'
+    this_path = os.path.join(out_dir,'bstates',configs['model_name'],this_file)
+    for line in fileinput.input(this_path, inplace=True):
+        if line.startswith('  STEP=') or line.startswith(' STEP=') or line.startswith('STEP=') or line.startswith('  STEP =') or line.startswith(' STEP =') or line.startswith('STEP ='):
+            print('  STEP=record_freq')
+        else:
+            print(line.replace('/seed_" & seed & "',''), end='')
