@@ -18,11 +18,6 @@ args = parser.parse_args()
 
 config_file = args.configfile
 submission_directory = args.submissiondirectory
-
-# config_file = 'config.yaml'
-# submission_directory = 'a_submission'
-# output_directory = 'we_simulation'
-
 template_directory = 'westpa_template'
 
 
@@ -32,7 +27,6 @@ my_configs = read_config.import_config(config_file)
 # get submitted model name and set output directory
 model_name = file_io.get_submitted_model_name(submission_directory)
 output_directory = 'we_' + str(model_name)
-
 
 # add model name to config dict
 my_configs['model_name'] = str(model_name)
@@ -59,3 +53,4 @@ file_io.write_new_westcfg(output_directory,my_configs)
 file_io.write_new_sceneWEmdl(output_directory,my_configs)
 file_io.write_new_scenemainmdl(output_directory,my_configs)
 file_io.write_new_scenerxn_outputmdl(output_directory,my_configs)
+
