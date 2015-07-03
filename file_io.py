@@ -38,7 +38,7 @@ def copy_mcell_model(submit_dir,mod_name,out_dir):
 # move Scene.WE.mdl template into model folder
 def mv_sceWEmdl(template_dir,mod_name,out_dir):
     this_file = 'Scene.WE.mdl'
-    shutil.copy(os.path.join(template_dir,'bstates',this_file),os.path.join(out_dir,'bstates',mod_name,this_file))
+    shutil.move(os.path.join(out_dir,'bstates',this_file),os.path.join(out_dir,'bstates',mod_name,this_file))
 
 # replace placeholder term in template file name with real term
 def replace_all(file,searchExp,replaceExp):
