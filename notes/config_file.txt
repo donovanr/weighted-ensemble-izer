@@ -1,0 +1,19 @@
+-python_to_use: # default to which python 
+-westpa_location: # default to ${HOME}/westpa
+-mcell_version: default to mcell
+
+-model_name: # get from folder name
+-observable_1: # species.location i.e. surf2b.World
+
+-pcoord_len: # 1 + substeps
+binbounds:
+	min_pcoord
+	max_pcord
+	bin_size
+	int_bins T/F
+	infty_pad T
+-max_total_iterations: #same as we_iters
+timestep: # get from input mcell model
+-chkpt_stride: # number of Mcell time steps per WE iteration
+-we_iters: # same as max_total_iterations
+-substeps: # pcoord_len - 1; how many times per WE iteration should we log data?

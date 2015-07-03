@@ -1,0 +1,49 @@
+
+
+settings:
+
+- cleanup.sh:
+	- rm -rf example_system_cube
+
+- env.sh:
+	- export WEST_PYTHON=$(which python)
+	- export WEST_ROOT="${HOME}/westpa"
+
+- runseg.sh:
+	- export MODEL_NAME=example_system_cube # the name of the directory all the model files live in
+	- export OBSERVABLE1=surf2b.World # observable we are using as our (1st) progress coordinate
+
+system.py:
+	- self.pcoord_len = 10+1
+	binbounds = [float('-inf')] + [1.0*i + 0.5 for i in xrange(0,1000,1)] + [float('inf')]
+	self.bin_target_counts[...] = 8
+
+- west.cfg:
+	- max_total_iterations: 100
+
+- bstates:
+	- bstates/example_system_cube/
+
+- Scene.WE.mdl:
+	- timestep
+	-chkpt_stride = 1e2
+	-we_iters = 100
+	-substeps = 10
+
+- Scene.main.mdl:
+	- INCLUDE_FILE = "Scene.WE.mdl"
+	- ITERATIONS = iterations
+	- TIME_STEP = timestep
+
+Scene.rxn_output.mdl
+	- STEP=record_freq
+	- {COUNT[surf1,WORLD]}=> "./react_data/seed_" & seed & "/surf1.World.dat"
+	- vs
+	- {COUNT[surf1,WORLD]}=> "./react_data/surf1.World.dat"
+
+If Scene.parameters: at top of each file,
+Scene.rxn_output.mdl:INCLUDE_FILE = "Scene.parameters.mdl" ???
+
+
+advanced features:
+	timestep in scene.WE.mdl
