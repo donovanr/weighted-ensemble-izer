@@ -47,50 +47,55 @@ def replace_all(file,searchExp,replaceExp):
 
 
 # hard-coded into template
-# TODO: turn these into a dict
-template_model_name = 'template_model_dir_name'
-template_west_python = 'template_west_python'
-template_west_root = 'template_west_root'
-template_observable_name = 'template_observable_name'
-template_record_frequency = 'template_record_frequency'
-template_bin_bounds = 'template_bin_bounds'
-template_we_iters = 'template_we_iters'
-template_we_stride = 'template_we_stride'
-
+template_names = {}
+template_names['model_name'] = 'template_model_dir_name'
+template_names['west_python'] = 'template_west_python'
+template_names['west_root'] = 'template_west_root'
+template_names['observable_name'] = 'template_observable_name'
+template_names['record_frequency'] = 'template_record_frequency'
+template_names['bin_bounds'] = 'template_bin_bounds'
+template_names['we_iters'] = 'template_we_iters'
+template_names['we_stride'] = 'template_we_stride'
 
 # TODO: pass config params as dict and parse out needed params in each function
 
 # write new cleanup.sh
-def write_new_cleanup(out_dir,mod_name):
+def write_new_cleanup(out_dir,configs):
     this_file = 'cleanup.sh'
-    replace_all(os.path.join(out_dir,this_file),template_model_name,mod_name)
+    this_path = os.path.join(out_dir,this_file)
+    replace_all(this_path,template_names['model_name'],configs['model_name'])
 
 # write new env.sh
-def write_new_env(out_dir,west_python,west_root):
+def write_new_env(out_dir,configs):
     this_file = 'env.sh'
-    replace_all(os.path.join(out_dir,this_file),template_west_python,west_python)
-    replace_all(os.path.join(out_dir,this_file),template_west_root,west_root)
+    this_path = os.path.join(out_dir,this_file)
+    replace_all(this_path,template_names['west_python'],configs['env']['python'])
+    replace_all(this_path,template_names['west_root'],configs['env']['westpa'])
 
 # write new runseg.sh
-def write_new_runseg(out_dir,mod_name,obs_name):
+def write_new_runseg(out_dir,configs):
     this_file = 'runseg.sh'
-    replace_all(os.path.join(out_dir,this_file),template_model_name,mod_name)
-    replace_all(os.path.join(out_dir,this_file),template_observable_name,obs_name)
+    this_path = os.path.join(out_dir,this_file)
+    replace_all(this_path,template_names['model_name'],configs['model_name'])
+    replace_all(this_path,template_names['observable_name'],configs['model']['observable_1'])
 
 # write new system.py
-def write_new_system(out_dir,rec_freq):
+def write_new_system(out_dir,configs):
     this_file = 'system.py'
-    replace_all(os.path.join(out_dir,this_file),template_record_frequency,str(rec_freq))
+    this_path = os.path.join(out_dir,this_file)
+    replace_all(this_path,template_names['record_frequency'],str(configs['data']['rec_freq']))
 # TODO: edit bin info in system.py
 
 # write new west.cfg
-def write_new_westcfg(out_dir,we_iters):
+def write_new_westcfg(out_dir,configs):
     this_file = 'west.cfg'
-    replace_all(os.path.join(out_dir,this_file),template_we_iters,str(we_iters))
+    this_path = os.path.join(out_dir,this_file)
+    replace_all(this_path,template_names['we_iters'],str(configs['WE']['iters']))
 
 # write new Scene.WE.mdl
-def write_new_sceneWEmdl(out_dir,mod_name,we_iters,we_stride,rec_freq):
+def write_new_sceneWEmdl(out_dir,configs):
     this_file = 'Scene.WE.mdl'
-    replace_all(os.path.join(out_dir,'bstates',mod_name,this_file),template_we_iters,str(we_iters))
-    replace_all(os.path.join(out_dir,'bstates',mod_name,this_file),template_we_stride,str(we_stride))
-    replace_all(os.path.join(out_dir,'bstates',mod_name,this_file),template_record_frequency,str(rec_freq))
+    this_path = os.path.join(out_dir,'bstates',configs['model_name'],this_file)
+    replace_all(this_path,template_names['we_iters'],str(configs['WE']['iters']))
+    replace_all(this_path,template_names['we_stride'],str(configs['WE']['stride']))
+    replace_all(this_path,template_names['record_frequency'],str(configs['data']['rec_freq']))
