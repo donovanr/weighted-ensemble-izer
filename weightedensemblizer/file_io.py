@@ -11,7 +11,7 @@ import file_io
 # get default timestep
 def get_default_timestep(configs):
     this_file = 'Scene.main.mdl'
-    this_path = os.path.join(configs['model_name'],this_file)
+    this_path = os.path.join(configs['model_dir'],this_file)
 
     with open(this_path) as f:
         for line in f:
@@ -38,15 +38,15 @@ def initialize_template(template_dir,output_dir):
 
 
 # copy mcell model into template
-def copy_mcell_model(mod_name,out_dir):
-    shutil.copytree(os.path.join(mod_name),os.path.join(out_dir,'bstates',mod_name))
+def copy_mcell_model(mod_dir,out_dir):
+    shutil.copytree(os.path.join(mod_dir),os.path.join(out_dir,'bstates',os.path.basename(mod_dir)))
 
 # move Scene.WE.mdl template into model folder
 def mv_sceWEmdl(mod_name,out_dir):
     this_file = 'Scene.WE.mdl'
     shutil.move(os.path.join(out_dir,'bstates',this_file),os.path.join(out_dir,'bstates',mod_name,this_file))
 
-# replace placeholder term in template file name with real term
+# generic function to replace placeholder term in template file name with real term
 def replace_all(file,searchExp,replaceExp):
     for line in fileinput.input(file, inplace=True):
         print(line.replace(searchExp, replaceExp), end='')
