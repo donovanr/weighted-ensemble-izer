@@ -12,12 +12,14 @@ import file_io
 def main(config_file,model_dir):
 
     # the dir this script is in
+    # __file is where *this* file lives__
     we_script_dir = os.path.dirname(os.path.realpath(__file__))
 
     # abs path of model dir gets passed, grab just the dir name
     model_name = os.path.basename(model_dir)
 
     # set output directory name based on input model directory, but keep abs path
+    # sys.argv[0] is where the parent script is called from
     output_directory = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'we_'+str(model_name))
 
     # template directory should never change
