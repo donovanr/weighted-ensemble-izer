@@ -9,7 +9,7 @@ import yaml
 import read_config
 import file_io
 
-def main(config_file,model_dir):
+def main(config_file,model_dir,output_directory):
 
     # the dir this script is in
     # __file is where *this* file lives__
@@ -20,7 +20,10 @@ def main(config_file,model_dir):
 
     # set output directory name based on input model directory, but keep abs path
     # sys.argv[0] is where the parent script is called from
-    output_directory = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'we_'+str(model_name))
+    
+    # require it as an arguemnt
+    # TODO: make it optional with a defalut value of either the pwd or the dir of the calling script?
+    #output_directory = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'we_'+str(model_name))
 
     # template directory should never change
     template_directory = os.path.join(we_script_dir,'westpa_template')
@@ -39,7 +42,7 @@ def main(config_file,model_dir):
     file_io.initialize_template(template_directory,output_directory)
 
     # copy mcell model into template
-    file_io.copy_mcell_model(model_name,output_directory)
+    file_io.copy_mcell_model(model_dir,output_directory)
 
     # move Scene.WE.mdl template into new template/model directory
     file_io.mv_sceWEmdl(model_name,output_directory)

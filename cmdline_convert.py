@@ -19,5 +19,9 @@ args = parser.parse_args()
 modeldirectory = os.path.abspath(os.path.realpath(args.modeldirectory))
 configfile = os.path.abspath(os.path.realpath(args.configfile))
 
+modelname = os.path.basename(modeldirectory)
+ouputdirectory = os.path.join(os.path.dirname(modeldirectory), 'we_'+str(modelname))
+
+
 # call main weighted ensemblizer function with args parsed from cmd line input
-weconvert.main(configfile,modeldirectory)
+weconvert.main(configfile,modeldirectory,ouputdirectory)
